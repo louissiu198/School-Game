@@ -9,7 +9,7 @@ class Noah:
         attack_func = [self.super_attack, self.normal_attack, self.fast_attack]
         for attack in attack_func:
             attack()
-        print(self.character_config.characteristic)
+        # print(self.character_config.characteristic)
         
     def super_attack(self) -> dict: # loggings
         self.character_config.get_attack(

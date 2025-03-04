@@ -27,10 +27,8 @@ class Characters:
                 "damage":       damage_caused,
                 "cooldown":     cooldown_rounds, 
             }
-            print({attack_type: attack_data})
-            self.characteristic["actions"].append({
-                attack_type: attack_data
-            })
+            # print({attack_type: attack_data})
+            self.characteristic["actions"].append(attack_data)
         return self.characteristic
 
     

@@ -40,6 +40,10 @@ class Users:
         if user_info != None:
             return dict(user_info)
 
+    def fetch_account_token(self, token: str = "testing") -> dict:
+        user_info: tuple = self.cursor.execute("SELECT * FROM users WHERE token = ?", (token,)).fetchone()
+        if user_info != None:
+            return dict(user_info)
     
 
 

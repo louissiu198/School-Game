@@ -115,11 +115,14 @@ async def join_game(session_id: str, request: Request, authorization: str = Cook
     if authorization:
         if session_id in game_temp:
             if user_cli.check_db_item("token", authorization): 
-                return templates.TemplateResponse(
-                    request=request, name="game.html", context = {
-                        "game_session": session_id
-                    }
-                )
+                if game_temp[session_id].join_game(user_cli.fetch_account_token(authorization)["username"], "noah"): # default
+                    return templates.TemplateResponse(
+                        request=request, name="game.html", context = {
+                            "game_session": session_id
+                        }
+                    )
+                else:
+                    return RedirectResponse("/lobby", status_code=status.HTTP_307_TEMPORARY_REDIRECT) 
         else:
             return RedirectResponse("/lobby", status_code=status.HTTP_307_TEMPORARY_REDIRECT) 
     return RedirectResponse("/register", status_code=status.HTTP_303_SEE_OTHER) 
@@ -166,12 +169,21 @@ async def ws(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            print(data)
             json_data = loads(data) # parse json string
-            print(json_data)
-            await websocket.send_text(dumps({
-                "message": "success"
-            }))
+            match json_data["type"]:
+                case "game_info":
+                    print(game_temp)
+                    print(game_temp[json_data["content"]].game_table)
+                    await websocket.send_text(dumps({
+                        "type": "game_info",
+                        "message": "success",
+                        "user": game_temp[json_data["content"]].current_player,
+                        "content": game_temp[json_data["content"]].game_table
+                    }))                
+            # print(json_data)
+            # await websocket.send_text(dumps({
+            #     "message": "success"
+            # }))
     except WebSocketDisconnect as e:
         print(f"Client disconnected: {e}")
 
@@ -188,4 +200,5 @@ if __name__ == "__main__":
 4 bottle of water
 
 2 school trousers
+bluer
 """

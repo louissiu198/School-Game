@@ -3,7 +3,7 @@ from characters.emma import Emma
 from characters.mason import Mason
 from characters.noah import Noah
 from characters.oliver import Oliver
-# hello ss
+
 class Game:
     def __init__(self, game_name: str = "default"): # no idea what this could be if value is blank
         self.current_player = 0
